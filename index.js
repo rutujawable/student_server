@@ -1,16 +1,30 @@
 import express  from "express"
 import dotenv from "dotenv"
 dotenv.config()
+import mongoose from "mongoose"
 import { getHealth } from "./controllers/Health.js"
 import { postPlant ,
      getPlants,
      getPlantId,
      putPlantId,
     deletePlantId,} from "./controllers/Plants.js"
+import { notFoundPage } from "./controllers/Errors.js"
 
 const app = express()
 
 app.use(express.json())
+
+const dbConnection = async ()=>{
+    const  conn = await mongoose.connect(process.env.mongoDB_URL)
+
+    if (conn){
+        console.log("mongodb connected☀")
+    }
+    else{
+        console.log("mongodb not connected🌑")
+    }
+}
+dbConnection();
 
 const PORT = process.env.PORT
 
@@ -48,11 +62,7 @@ const PORT = process.env.PORT
 
    
 
-   app.use("*",(req,res)=>{
-    res.send(`<div>
-        <h1 style="text-align:center"> 404 not found</h1>
-        </div>`)
-   })
+   app.use("*",notFoundPage)
 
 
      
