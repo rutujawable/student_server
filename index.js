@@ -2,13 +2,16 @@ import express  from "express"
 import dotenv from "dotenv"
 dotenv.config()
 import mongoose from "mongoose"
-import { getHealth } from "./controllers/Health.js"
+import { getHealth } from "./controllers/health.js"
+
 import { postPlant ,
-     getPlants,
-     getPlantId,
-     putPlantId,
-    deletePlantId,} from "./controllers/Plants.js"
-import { notFoundPage } from "./controllers/Errors.js"
+    getPlants,
+    getPlantId,
+    putPlantId,
+   deletePlantId,} from "./controllers/plants.js"
+
+import { notFoundPage } from "./controllers/errors.js"
+
 
 const app = express()
 

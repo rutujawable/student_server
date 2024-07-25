@@ -1,25 +1,8 @@
 
-const plants = [
-    {
-        "id":1,"plantname":"rose","cateogary":"flower","price":"50","height":"1.5","color":"pink"
-     },
-
- {
-    "id":2,"plantname":"sunflower","cateogary":"flower","price":"50","height":"1.5","color":"pink"
- },
-
- {
-    "id":3,"plantname":"mango","cateogary":"fruits","price":"40","height":"1.5","color":"pink"
- }
+import Plant from "../models/Plant.js"
 
 
-
-
-
-]
-
-
-const postPlant = (req,res)=>
+const postPlant =  async (req,res)=>
     {
        const {
         name,
@@ -30,90 +13,49 @@ const postPlant = (req,res)=>
 
        }=req.body
 
-       if(!name){
-        return res.json({
-            success:false,
-            data:null,
-            message:"name is required"
-        })
-       }
-
-       if(!cateogary){
-        return res.json({
-            success:false,
-            data:null,
-            message:"cateogary is required"
-        })
-       }
-
-       if(!price){
-        return res.json({
-            success:false,
-            data:null,
-            message:"price is required"
-        })
-       }
-       if(!height){
-        return res.json({
-            success:false,
-            data:null,
-            message:"height is required"
-        })
-       }
-       if(!color){
-        return res.json({
-            success:false,
-            data:null,
-            message:"color is required"
-        })
-       }
 
 
-    const randomid= Math.round(Math.random()*1000)
 
-    const newplant = {
-        id:randomid,
-        plantname:name,
+    const newPlant = new Plant({
+        name:name,
         cateogary:cateogary,
         price:price,
         height:height,
         color:color
-        
-    }
+    })
 
-    plants.push(newplant)
+    const savedplant = await newPlant.save();
 
 
     res.json({
          success:true,
-         data:newplant,
+         data:newPlant,
          message:"new plant added successfully"
 }
  )
 }
 
-  const getPlants = (req,res)=>{
+  const getPlants = async (req,res)=>{
+    const allPlants = await Plant.find()
 
     res.json({
         success:true,
-        data:plants,
+        data:allPlants,
         message:"all plants are fetched"
     })
 
 }
 
-const getPlantId = (req,res)=>{
+const getPlantId = async (req,res)=>{
 
  
 
     const {id} = req.params
   
-    const plant = plants.find(
-      (p)=>
-           p.id == id
+   const plant = await Plant.findOne({_id:id})
       
   
-    )
+    
       
       
     res.json({
@@ -125,7 +67,7 @@ const getPlantId = (req,res)=>{
     }
   
 
-    const putPlantId = (req,res)=>{
+    const putPlantId = async (req,res)=>{
         const {id}= req.params
         const {
           name,
@@ -136,68 +78,34 @@ const getPlantId = (req,res)=>{
   
          }=req.body
   
-        let index= -1
-        plants.forEach((plant,i)=>{
-  
-           if( plant.id == id){
-              index=i
-           }
-          })
-  
-           const newobj = {
-              id:id,
-              plantname:name,
-              cateogary:cateogary,
-              price:price,
-              height:height,
-              color:color
-              
-          }
-  
-           if(index==-1){
-              return  res.json({
-              success:false,
-               data:null,
-               message:`plant not found for id ${id}`
-  
-          
-          })
-           }
-  
-           else{
-              plants[index]= newobj
-             return  res.json({
+          const updatedPlant = await Plant.updateOne({_id:id},
+            {$set:{
+                name:name,
+                cateogary:cateogary,
+                price:price,
+                height:height,
+                color:color
+
+
+            }
+            }
+          )
+
+              res.json({
                   success:true,
-                  data:newobj,
+                  data:updatedPlant,
                   message:"plant updated successfully"
               })
            }
   
-          }
+          
 
-          const deletePlantId = (req,res)=>
+          const deletePlantId = async (req,res)=>
             {
                 const {id}=req.params
-                let index=-1
-        
-                plants.forEach((plant,i)=>{
-                    if(plant.id==id){
-                        index=i
-                    }
-               
-        
-                })
-                
-                if(index==-1){
-                    res.json({
-                        success:false,
-                        message:`plant not found for  id ${id}`
-                    })
-                }
-                else{
-        
-                    plants.splice(index,1)
-                    res.json({
+
+                 await Plant.deleteOne({_id:id})
+                res.json({
                         succes:true,
                         message:"plant deleted successfully",
                         data:null
@@ -206,7 +114,7 @@ const getPlantId = (req,res)=>{
         
                 }
         
-            }
+            
         
     
 
