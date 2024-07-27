@@ -7,15 +7,15 @@ import cors from "cors"
 
 dotenv.config()
 import mongoose from "mongoose"
-import { getHealth } from "./controllers/health.js"
+import { getHealth } from "./controllers/Health.js"
 
 import { postPlant ,
     getPlants,
     getPlantId,
     putPlantId,
-   deletePlantId,} from "./controllers/plants.js"
+   deletePlantId,} from "./controllers/Plants.js"
 
-import { notFoundPage } from "./controllers/errors.js"
+import { notFoundPage } from "./controllers/Errors.js"
 
 
 const app = express()
