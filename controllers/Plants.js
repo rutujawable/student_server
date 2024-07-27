@@ -9,7 +9,8 @@ const postPlant =  async (req,res)=>
         cateogary,
         price,
         height,
-        color
+        color,
+        image
 
        }=req.body
 
@@ -21,7 +22,8 @@ const postPlant =  async (req,res)=>
         cateogary:cateogary,
         price:price,
         height:height,
-        color:color
+        color:color,
+        image:image
     })
 
     const savedplant = await newPlant.save();
@@ -36,7 +38,7 @@ const postPlant =  async (req,res)=>
 }
 
   const getPlants = async (req,res)=>{
-    const allPlants = await Plant.find()
+    const allPlants = await Plant.find().sort({createdAt:-1})
 
     res.json({
         success:true,
@@ -74,7 +76,8 @@ const getPlantId = async (req,res)=>{
           cateogary,
           price,
           height,
-          color
+          color,
+          image
   
          }=req.body
   
@@ -84,7 +87,8 @@ const getPlantId = async (req,res)=>{
                 cateogary:cateogary,
                 price:price,
                 height:height,
-                color:color
+                color:color,
+                image:image
 
 
             }
